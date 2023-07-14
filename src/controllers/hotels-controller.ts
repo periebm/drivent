@@ -6,23 +6,21 @@ import hotelsService from '../services/hotels-service';
 
 export async function getAllHotels(req: AuthenticatedRequest, res: Response) {
   try {
-    const allHotels = await hotelsService.getAllHotels();
+    const allHotels = await hotelsService.getAllHotels(req.userId);
+    if (!allHotels) return res.sendStatus(httpStatus.NOT_FOUND);
 
     return res.status(httpStatus.OK).send(allHotels);
   } catch (error) {
-    return res.sendStatus(httpStatus.NO_CONTENT);
+    if (error.name === 'UnauthorizedError') {
+      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    }
+    else if (error.name === 'PaymentRequiredError') {
+      return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
+    }
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
 
 export async function getHotelsById(req: AuthenticatedRequest, res: Response) {
-  let { userId } = req;
 
-  try {
-    const address = await hotelsService.getHotelById(userId);
-    res.status(httpStatus.OK).send(address);
-  } catch (error) {
-    if (error.name === 'NotFoundError') {
-      return res.sendStatus(httpStatus.NO_CONTENT);
-    }
-  }
 }

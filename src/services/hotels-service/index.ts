@@ -1,18 +1,25 @@
-import { Address, Enrollment } from '@prisma/client';
-import { request } from '@/utils/request';
-import { notFoundError } from '@/errors';
-import addressRepository, { CreateAddressParams } from '@/repositories/address-repository';
-import enrollmentRepository, { CreateEnrollmentParams } from '@/repositories/enrollment-repository';
-import { exclude } from '@/utils/prisma-utils';
 import {AllHotels } from '@/protocols';
 import hotelsRepository from '../../repositories/hotels-repository';
+import { paymentRequiredError } from '../../errors/payment-required-error';
+import { notFoundError } from '../../errors';
 
-async function getAllHotels() : Promise<AllHotels[]> {
+
+async function verifyTicketEnrollmentPayment(userId: number) {
+
+  const enrollment = await hotelsRepository.findUserEnrollmentById(userId);
+  if (!enrollment) throw notFoundError(); 
+  const ticket = await hotelsRepository.findUserTicketById(enrollment.userId);
+  if(!ticket) throw notFoundError();
+  if(ticket.TicketType.isRemote === true || ticket.status !== 'PAID' || ticket.TicketType.includesHotel === false) throw paymentRequiredError();
+}
+
+
+async function getAllHotels(userId: number) : Promise<AllHotels[]> {
+  await verifyTicketEnrollmentPayment(userId);
+
   const result: AllHotels[] = await hotelsRepository.findAllHotels();
 
-  if (!result) {
-    throw notFoundError();
-  }
+  if (!result) throw notFoundError();
 
   return result;
 }
