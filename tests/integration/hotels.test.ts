@@ -253,7 +253,6 @@ describe('GET /hotels/:id', () => {
 
 
       const response = await server.get(`/hotels/${hotel.id}`).set('Authorization', `Bearer ${token}`);
-      console.log(response.body)
       expect(response.status).toEqual(httpStatus.OK);
     })
   });
