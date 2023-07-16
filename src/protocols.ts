@@ -70,3 +70,21 @@ export type AllHotels = {
   createdAt: Date
   updatedAt: Date
 };
+
+export type Room={
+  id: number;
+  name: string;
+  capacity: number;
+  hotelId: number;
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type HotelRooms = {
+  id: number;
+  name: string;
+  image: string;
+  createdAt: Date
+  updatedAt: Date
+  Rooms: Room[]
+};
