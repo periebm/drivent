@@ -25,7 +25,7 @@ export async function getHotelsRoom(req: AuthenticatedRequest, res: Response) {
   let hotelId = parseInt(req.params.hotelId)
   try {
     const allHotels = await hotelsService.getHotelById(hotelId, req.userId);
-    //if (!allHotels) return res.sendStatus(httpStatus.NOT_FOUND);
+    if (!allHotels) return res.sendStatus(httpStatus.NOT_FOUND);
 
     return res.status(httpStatus.OK).send(allHotels);
   } catch (error) {
