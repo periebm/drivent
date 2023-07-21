@@ -3,6 +3,14 @@ import { Payment, Ticket } from '@prisma/client';
 export type ApplicationError = {
   name: string;
   message: string;
+  export type HotelRooms = {
+    id: number;
+    name: string;
+    image: string;
+    createdAt: Date
+    updatedAt: Date
+    Rooms: Room[]
+  };
 };
 
 export type ViaCEPAddress = {
@@ -61,30 +69,4 @@ export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;
 
 export type InputTicketBody = {
   ticketTypeId: number;
-};
-
-export type AllHotels = {
-  id: number;
-  name: string;
-  image: string;
-  createdAt: Date
-  updatedAt: Date
-};
-
-export type Room={
-  id: number;
-  name: string;
-  capacity: number;
-  hotelId: number;
-  createdAt: Date
-  updatedAt: Date
-}
-
-export type HotelRooms = {
-  id: number;
-  name: string;
-  image: string;
-  createdAt: Date
-  updatedAt: Date
-  Rooms: Room[]
 };
