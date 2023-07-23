@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "test:coverage": "cross-env NODE_ENV=test jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**'",
     "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.build.json",
     "prepare": "husky install",
